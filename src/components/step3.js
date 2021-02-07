@@ -8,7 +8,7 @@ import {useHistory} from 'react-router-dom';
 import {useData} from '../DataContext';
 
 export const Step3 = () => {
-    const { register, handleSubmit} = useForm();
+    const { register, handleSubmit, watch} = useForm();
     const history = useHistory();
 
     const {data, setValues} = useData();

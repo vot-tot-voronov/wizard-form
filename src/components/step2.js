@@ -4,14 +4,34 @@ import {MainContainer} from './maincontainer';
 import {PrimaryButton} from './primaryButton';
 import {useForm} from 'react-hook-form';
 import {useHistory} from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 
 import {useData} from '../DataContext';
 
 export const Step2 = () => {
-    const { register, handleSubmit} = useForm();
-    const history = useHistory();
-
     const {data, setValues} = useData();
+
+    const schema = yup.object().shape({
+        lastName: yup.string().matches(/^([^0-9]*)$/).required(),
+        firstName: yup.string().matches(/^([^0-9]*)$/).required(),
+        middleName: yup.string().matches(/^([^0-9]*)$/).required(),
+        email: yup.string().email(),
+        phone: yup.string().matches(/\+7 \d{3} \d{3}-\d{2}-\d{2}/).required(),
+        passport: yup.string().matches(/^([^0-9]*)$/).required(),
+        series: yup.number().positive().integer().required(),
+        number: yup.number().positive().integer().required(),
+        whenGiven: yup.number().positive().integer().required(),
+        monthsGiven: yup.number().positive().integer().required(),
+        yearGiven: yup.number().positive().integer().required()
+    });
+
+
+    const { register, handleSubmit} = useForm({
+        mode: "onBlur",
+        resolver: yupResolver(schema)
+    });
+    const history = useHistory();
     const {currentStep} = data;
     
     const onSubmit = (data) => {
@@ -25,7 +45,7 @@ export const Step2 = () => {
         <>
         <MainContainer step={1}></MainContainer>
         <MainContainer step={2}>
-            <form onSubmit={handleSubmit(onSubmit)} className="form-about">
+            <form noValidate onSubmit={handleSubmit(onSubmit)} className="form-about">
                 <input id="lastName" type="text" name="lastName" ref={register} />
                 <label htmlFor="lastName">
                     <span className="form-about__label">Фамилия</span>
