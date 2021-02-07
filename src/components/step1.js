@@ -8,22 +8,31 @@ import {useHistory} from 'react-router-dom';
 import {useData} from '../DataContext';
 
 export const Step1 = () => {
-    const { register, handleSubmit} = useForm();
-    const history = useHistory();
-
     const {data, setValues} = useData();
-    console.log(data);
+    const {currentStep} = data;
+
+    const { register, handleSubmit, watch} = useForm({
+        defaultValues: {
+            legalStatus: data.legalStatus
+        }
+    });
+    const watchInputs = watch("legalStatus");
+    
+    const history = useHistory();
+    
     const onSubmit = (data) => {
-        setValues(data);
+        const newData = {...data, currentStep: currentStep + 1};
+        console.log(newData)
+        setValues(newData);
         history.push('/step2');
     }
 
     return (
         <>
-        <MainContainer currentStep={"1"}>
+        <MainContainer currentStep={currentStep} step={1}>
             <form onSubmit={handleSubmit(onSubmit)} className="form-status">
                 <input id="individual" type="radio" value="individual" name="legalStatus" 
-                    defaultChecked={true} ref={register({ required: true })}
+                    defaultChecked={!watchInputs && true} ref={register({ required: true })}
                 />
                 <label htmlFor="individual">
                     <span className="form-status__label">Физическое лицо</span>
@@ -39,8 +48,8 @@ export const Step1 = () => {
                 <PrimaryButton>Продолжить</PrimaryButton>
             </form>
         </MainContainer>
-        <MainContainer currentStep={"2"}></MainContainer>
-        <MainContainer currentStep={"3"}></MainContainer>
+        <MainContainer step={2}></MainContainer>
+        <MainContainer step={3}></MainContainer>
         </>
     );
 }

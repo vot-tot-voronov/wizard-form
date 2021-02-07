@@ -8,21 +8,24 @@ import {useHistory} from 'react-router-dom';
 import {useData} from '../DataContext';
 
 export const Step3 = () => {
-    const { register, handleSubmit, errors, watch} = useForm();
+    const { register, handleSubmit} = useForm();
     const history = useHistory();
 
     const {data, setValues} = useData();
-    console.log(data);
+    const {currentStep} = data;
+    
     const onSubmit = (data) => {
-        setValues(data);
+        const newData = {...data, currentStep: currentStep + 1};
+        console.log(newData)
+        setValues(newData);
         history.push('/result');
     }
 
     return (
         <>
-        <MainContainer currentStep={"1"}></MainContainer>
-        <MainContainer currentStep={"2"}></MainContainer>
-        <MainContainer currentStep={"3"}>
+        <MainContainer step={1}></MainContainer>
+        <MainContainer step={2}></MainContainer>
+        <MainContainer step={3}>
             <form onSubmit={handleSubmit(onSubmit)} className="form-agree">
                 <input id="agreeWithRules" type="checkbox" value="agree" name="agreeWithRules" 
                     ref={register({ required: true })}

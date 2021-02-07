@@ -12,16 +12,19 @@ export const Step2 = () => {
     const history = useHistory();
 
     const {data, setValues} = useData();
-    console.log(data);
+    const {currentStep} = data;
+    
     const onSubmit = (data) => {
-        setValues(data);
+        const newData = {...data, currentStep: currentStep + 1};
+        console.log(newData)
+        setValues(newData);
         history.push('/step3');
     }
 
     return (
         <>
-        <MainContainer currentStep={"1"}></MainContainer>
-        <MainContainer currentStep={"2"}>
+        <MainContainer step={1}></MainContainer>
+        <MainContainer step={2}>
             <form onSubmit={handleSubmit(onSubmit)} className="form-about">
                 <input id="lastName" type="text" name="lastName" ref={register} />
                 <label htmlFor="lastName">
@@ -72,7 +75,7 @@ export const Step2 = () => {
                 <PrimaryButton>Продолжить</PrimaryButton>
             </form>
         </MainContainer>
-        <MainContainer currentStep={"3"}></MainContainer>
+        <MainContainer step={3}></MainContainer>
         </>
     );
 }
