@@ -22,7 +22,6 @@ export const Step1 = () => {
     
     const onSubmit = (data) => {
         const newData = {...data, currentStep: currentStep + 1};
-        console.log(newData)
         setValues(newData);
         history.push('/step2');
     }

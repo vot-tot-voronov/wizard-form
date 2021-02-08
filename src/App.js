@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import {Step1} from './components/step1';
 import {Step2} from './components/step2';
 import {Step3} from './components/step3';
+import {Result} from './components/result';
 
 const Header = () => <h1>Header</h1>;
-const Result = () => <h1>Result</h1>;
 
 function App() {
   return (

@@ -6,17 +6,32 @@ import {useForm} from 'react-hook-form';
 import {useHistory} from 'react-router-dom';
 
 import {useData} from '../DataContext';
+import Swal from 'sweetalert2';
 
 export const Step3 = () => {
-    const { register, handleSubmit, watch} = useForm();
+    const {data, setValues} = useData();
+    const { register, handleSubmit, watch} = useForm({
+        defaultValues: {
+            agreeWithRules: data.agreeWithRules,
+            notificated: data.notificated
+        }
+    });
+
+    const wereChecked = watch(['agreeWithRules', 'notificated']);
+    console.log("wereChecked", wereChecked);
+
     const history = useHistory();
 
-    const {data, setValues} = useData();
+    
     const {currentStep} = data;
     
     const onSubmit = (data) => {
         const newData = {...data, currentStep: currentStep + 1};
-        console.log(newData)
+        Swal.fire(
+            'Успех!',
+            'Ваша форма успешно отправлена!',
+            'success'
+        );
         setValues(newData);
         history.push('/result');
     }
@@ -28,16 +43,16 @@ export const Step3 = () => {
         <MainContainer step={3}>
             <form onSubmit={handleSubmit(onSubmit)} className="form-agree">
                 <input id="agreeWithRules" type="checkbox" value="agree" name="agreeWithRules" 
-                    ref={register({ required: true })}
+                    ref={register({required: true})}
                 />
                 <label htmlFor="agreeWithRules">
-                    <span className="form-agree__label">Физическое лицо</span>
+                    <span className="form-agree__label">Согласен</span>
                 </label>
                 <input id="notificated" type="checkbox" value="notificated" name="notificated" 
-                    ref={register({ required: true })}
+                    ref={register({required: true})}
                 />
                 <label htmlFor="notificated">
-                    <span className="form-agree__label">Юридическое лицо</span>
+                    <span className="form-agree__label">Уведомлен</span>
                 </label>
                 <PrimaryButton>Отправить</PrimaryButton>
             </form>

@@ -11,13 +11,13 @@ import {useData} from '../DataContext';
 
 export const Step2 = () => {
     const {data, setValues} = useData();
-
+    //matches(/\+7 \d{3} \d{3}-\d{2}-\d{2}/) phone
     const schema = yup.object().shape({
         lastName: yup.string().matches(/^([^0-9]*)$/).required(),
         firstName: yup.string().matches(/^([^0-9]*)$/).required(),
         middleName: yup.string().matches(/^([^0-9]*)$/).required(),
-        email: yup.string().email(),
-        phone: yup.string().matches(/\+7 \d{3} \d{3}-\d{2}-\d{2}/).required(),
+        email: yup.string().email().required(),
+        phone: yup.string().required(),
         passport: yup.string().matches(/^([^0-9]*)$/).required(),
         series: yup.number().positive().integer().required(),
         number: yup.number().positive().integer().required(),
@@ -28,6 +28,19 @@ export const Step2 = () => {
 
 
     const { register, handleSubmit} = useForm({
+        defaultValues: {
+            lastName: data.lastName,
+            firstName: data.firstName,
+            middleName: data.middleName,
+            email: data.email,
+            phone: data.phone,
+            passport: data.passport,
+            series: data.series,
+            number: data.number,
+            whenGiven: data.whenGiven,
+            monthsGiven: data.monthsGiven,
+            yearGiven: data.yearGiven
+        },
         mode: "onBlur",
         resolver: yupResolver(schema)
     });
@@ -36,7 +49,6 @@ export const Step2 = () => {
     
     const onSubmit = (data) => {
         const newData = {...data, currentStep: currentStep + 1};
-        console.log(newData)
         setValues(newData);
         history.push('/step3');
     }
